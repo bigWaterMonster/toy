@@ -1,15 +1,35 @@
 <template>
   <ul class="types">
-    <li class="active">支出</li>
-    <li >收入</li>
+    <li
+      :class="{active: type === oneType.type }"
+      v-for="oneType of types"
+      :key="oneType.type"
+      @click="selectType(oneType.type)"
+    >{{ oneType.label }}</li>
   </ul>
 </template>
 
 <script lang="ts">
-import { Component, Vue } from 'vue-property-decorator'
+import { Component, Vue, Prop } from 'vue-property-decorator'
 
-@Component({})
-export default class Types extends Vue {}
+@Component({
+})
+export default class Types extends Vue {
+  @Prop(String) defaultType: string | undefined
+  types = [{ type: '-', label: '支出' }, { type: '+', label: '收入' }]
+  type = '-'
+  created() {
+    if (this.defaultType) {
+      this.type = this.defaultType
+    }
+  }
+  selectType(type: string): void {
+    if (type !== '-' && type !== '+') {
+      throw Error('type is known')
+    }
+    this.type = type
+  }
+}
 
 </script>
 
